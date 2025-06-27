@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14
+    container_name: task-postgres
+    ports:
+      - "5196:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin321
+      POSTGRES_DB: hr_task_management
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  backend:
+    build: ./Backend
+    container_name: task-backend
+    ports:
+      - "3149:3000"
+    depends_on:
+      - postgres
+    environment:
+      PGHOST: postgres
+      PGUSER: postgres
+      PGPASSWORD: admin321
+      PGDATABASE: hr_task_management
+      PGPORT: 5432
+
+  frontend:
+    build: ./Frontend
+    container_name: task-frontend
+    ports:
+      - "8769:80"
+    depends_on:
+      - backend
+
+  hr:
+    build: ./HR
+    container_name: task-hr
+    ports:
+      - "8770:80"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
+
