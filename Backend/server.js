@@ -75,7 +75,7 @@ app.put('/api/tasks/:id', async (req, res) => {
     }
 });
 
-const PORT = 3000;
+const PORT = 3149;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
